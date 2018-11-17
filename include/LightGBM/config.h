@@ -591,6 +591,16 @@ public:
   // desc = **Note**: can be used only in CLI version
   std::string convert_model = "gbdt_prediction.cpp";
 
+  // desc = the file to which floats are reported
+  std::string report_outfile = "LightGBM_report_floats";
+
+  // desc = which information is written to ``report_outfile``
+  // desc = options are: none, gradient, hessian, score
+  std::string report_kind = "none";
+
+  // desc = the fraction of the ``report_kind`` floats that are actually written to the ``report_outfile``
+  double report_fraction = 0.25;
+
   #pragma endregion
 
   #pragma region Objective Parameters

@@ -237,6 +237,9 @@ std::unordered_set<std::string> Config::parameter_set({
   "pred_early_stop_margin",
   "convert_model_language",
   "convert_model",
+  "report_outfile",
+  "report_kind",
+  "report_fraction",
   "num_class",
   "is_unbalance",
   "scale_pos_weight",
@@ -456,6 +459,12 @@ void Config::GetMembersFromString(const std::unordered_map<std::string, std::str
 
   GetString(params, "convert_model", &convert_model);
 
+  GetString(params, "report_outfile", &report_outfile);
+
+  GetString(params, "report_kind", &report_kind);
+
+  GetDouble(params, "report_fraction", &report_fraction);
+
   GetInt(params, "num_class", &num_class);
   CHECK(num_class >0);
 
@@ -597,6 +606,9 @@ std::string Config::SaveMembersToString() const {
   str_buf << "[pred_early_stop_margin: " << pred_early_stop_margin << "]\n";
   str_buf << "[convert_model_language: " << convert_model_language << "]\n";
   str_buf << "[convert_model: " << convert_model << "]\n";
+  str_buf << "[report_outfile: " << report_outfile << "]\n";
+  str_buf << "[report_kind: " << report_kind << "]\n";
+  str_buf << "[report_fraction: " << report_fraction << "]\n";
   str_buf << "[num_class: " << num_class << "]\n";
   str_buf << "[is_unbalance: " << is_unbalance << "]\n";
   str_buf << "[scale_pos_weight: " << scale_pos_weight << "]\n";

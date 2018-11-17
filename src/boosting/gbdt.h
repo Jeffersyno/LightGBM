@@ -5,6 +5,7 @@
 #include <LightGBM/objective_function.h>
 #include <LightGBM/prediction_early_stop.h>
 #include <LightGBM/json11.hpp>
+#include <LightGBM/reporting.h>
 
 #include "score_updater.hpp"
 
@@ -15,6 +16,7 @@
 #include <memory>
 #include <mutex>
 #include <map>
+#include <optional>
 
 using namespace json11;
 
@@ -489,6 +491,8 @@ protected:
 
   Json forced_splits_json_;
 
+
+  std::optional<FloatWriter> report_writer_; // enabled by 'score_outfile' config field
 };
 
 }  // namespace LightGBM

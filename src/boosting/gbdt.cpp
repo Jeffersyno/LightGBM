@@ -114,6 +114,17 @@ void GBDT::Init(const Config* config, const Dataset* train_data, const Objective
       class_need_train_[i] = objective_function_->ClassNeedTrain(i);
     }
   }
+
+  // Reporting scores at each iteration?
+  if (config->report_kind == "score"
+          || config->report_kind == "gradient"
+          || config->report_kind == "hessian") {
+    Log::Info("Enabling reporting for '%s'", config->report_kind.c_str());
+    this->report_writer_.emplace(config->report_outfile + "_" + config->report_kind,
+            config->report_fraction);
+  } else if(config->report_kind != "none") {
+    Log::Warning("Report kind unknown: '%s'", config->report_kind);
+  }
 }
 
 void GBDT::AddValidDataset(const Dataset* valid_data,
@@ -361,6 +372,13 @@ bool GBDT::TrainOneIter(const score_t* gradients, const score_t* hessians) {
         hess = hessians_.data() + bias;
       }
       new_tree.reset(tree_learner_->Train(grad, hess, is_constant_hessian_, forced_splits_json_));
+      
+      // Reporting floats: either gradients or hessians
+      if (report_writer_) {
+          std::string &kind = config_->report_kind;
+          if (kind == "gradient") { report_writer_->WriteFloats(bag_data_cnt_, grad); }
+          if (kind == "hessian")  { report_writer_->WriteFloats(bag_data_cnt_, hess); }
+      }
     }
 
     if (new_tree->num_leaves() > 1) {
@@ -467,6 +485,12 @@ void GBDT::UpdateScore(const Tree* tree, const int cur_tree_id) {
   // update validation score
   for (auto& score_updater : valid_score_updater_) {
     score_updater->AddScore(tree, cur_tree_id);
+  }
+
+  // log scores if enabled in config -- only enabled for simple case
+  if (report_writer_ && config_->report_kind == "score") {
+    size_t offset = num_data_ * cur_tree_id;
+    report_writer_->WriteFloats(num_data_, train_score_updater_->score() + offset);
   }
 }
 

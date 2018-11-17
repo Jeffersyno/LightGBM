@@ -647,6 +647,20 @@ IO Parameters
 
    -  **Note**: can be used only in CLI version
 
+-  ``report_outfile`` :raw-html:`<a id="report_outfile" title="Permalink to this parameter" href="#report_outfile">&#x1F517;&#xFE0E;</a>`, default = ``LightGBM_report_floats.txt``, type = string
+
+   -  the file to which floats are reported
+
+-  ``report_kind`` :raw-html:`<a id="report_kind" title="Permalink to this parameter" href="#report_kind">&#x1F517;&#xFE0E;</a>`, default = ``none``, type = string
+
+   -  which information is written to ``report_outfile``
+
+   -  options are: none, gradient, hessian, score
+
+-  ``report_fraction`` :raw-html:`<a id="report_fraction" title="Permalink to this parameter" href="#report_fraction">&#x1F517;&#xFE0E;</a>`, default = ``0.25``, type = double
+
+   -  the fraction of the ``report_kind`` floats that are actually written to the ``report_outfile``
+
 Objective Parameters
 --------------------
 
