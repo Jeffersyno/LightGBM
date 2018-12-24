@@ -373,7 +373,11 @@ bool GBDT::TrainOneIter(const score_t* gradients, const score_t* hessians) {
         grad = gradients_.data() + bias;
         hess = hessians_.data() + bias;
       }
+
+      auto start_time = std::chrono::steady_clock::now();
       new_tree.reset(tree_learner_->Train(grad, hess, is_constant_hessian_, forced_splits_json_));
+      std::chrono::duration<double, std::milli> dur = std::chrono::steady_clock::now() - start_time;
+      Log::Info("REPORTING tree time: %.4f (#leaves = %d)", dur, config_->num_leaves);
       
       // Reporting floats: either gradients or hessians
       if (report_writer_) {
