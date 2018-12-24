@@ -362,7 +362,7 @@ protected:
   /*!
   * \brief Print eval result and check early stopping
   */
-  bool EvalAndCheckEarlyStopping();
+  virtual bool EvalAndCheckEarlyStopping();
 
   /*!
   * \brief reset config for bagging
@@ -409,7 +409,7 @@ protected:
   */
   std::string OutputMetric(int iter);
 
-  double BoostFromAverage(int class_id);
+  double BoostFromAverage(int class_id, bool update_scorer);
 
   /*! \brief current iteration */
   int iter_;

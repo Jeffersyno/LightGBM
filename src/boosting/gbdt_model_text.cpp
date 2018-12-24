@@ -22,6 +22,10 @@ std::string GBDT::DumpModel(int start_iteration, int num_iteration) const {
   str_buf << "\"num_tree_per_iteration\":" << num_tree_per_iteration_ << "," << '\n';
   str_buf << "\"label_index\":" << label_idx_ << "," << '\n';
   str_buf << "\"max_feature_idx\":" << max_feature_idx_ << "," << '\n';
+  str_buf << "\"average_output\":" << (average_output_ ? "true" : "false") << ",\n";
+  if (objective_function_ != nullptr) {
+    str_buf << "\"objective\":\"" << objective_function_->ToString() << "\",\n";
+  }
 
   str_buf << "\"feature_names\":[\""
     << Common::Join(feature_names_, "\",\"") << "\"],"
@@ -148,7 +152,7 @@ std::string GBDT::ModelToIfElse(int num_iteration) const {
   str_buf << "\t\t\t" << "output[k] /= num_iteration_for_pred_;" << '\n';
   str_buf << "\t\t" << "}" << '\n';
   str_buf << "\t" << "}" << '\n';
-  str_buf << "\t" << "else if (objective_function_ != nullptr) {" << '\n';
+  str_buf << "\t" << "if (objective_function_ != nullptr) {" << '\n';
   str_buf << "\t\t" << "objective_function_->ConvertOutput(output, output);" << '\n';
   str_buf << "\t" << "}" << '\n';
   str_buf << "}" << '\n';
@@ -162,7 +166,7 @@ std::string GBDT::ModelToIfElse(int num_iteration) const {
   str_buf << "\t\t\t" << "output[k] /= num_iteration_for_pred_;" << '\n';
   str_buf << "\t\t" << "}" << '\n';
   str_buf << "\t" << "}" << '\n';
-  str_buf << "\t" << "else if (objective_function_ != nullptr) {" << '\n';
+  str_buf << "\t" << "if (objective_function_ != nullptr) {" << '\n';
   str_buf << "\t\t" << "objective_function_->ConvertOutput(output, output);" << '\n';
   str_buf << "\t" << "}" << '\n';
   str_buf << "}" << '\n';
